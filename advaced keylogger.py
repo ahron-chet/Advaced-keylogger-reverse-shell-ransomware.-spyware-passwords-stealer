@@ -16,8 +16,7 @@ print('start')
 key_crypt=b'64anpQ1F__rHalgTiLjqVNcf7TyirzwEqGJQM3fKAC8='
 telegram_token = 'Your telegram bot token'
 chat_id = 'chat id'
-telegram_token = '5330049993:AAHZALg3qBzRxExSTTRiCVoMpkQH8GTGGho'
-chat_id = '-791347020'
+
 keys=[]
 count=0
 
