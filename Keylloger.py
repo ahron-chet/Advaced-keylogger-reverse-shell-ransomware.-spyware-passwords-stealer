@@ -33,8 +33,6 @@ key_crypt=b'64anpQ1F__rHalgTiLjqVNcf7TyirzwEqGJQM3fKAC8='
 telegram_token = 'Your telegram bot token'
 chat_id = 'chat id'
 
-telegram_token = '5424626039:AAHFuTTwIoIQI8I-3hgPvg8vE5_gFTtLmRI'
-chat_id = '-1001550861772'
 keys=[]
 count=0
 
